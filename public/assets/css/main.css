@@ -1,0 +1,18 @@
+.thead-new th{color:#8898aa;background-color:#f6f9fc}
+.thead-new th{color:#8898aa;border-color:#e9ecef;background-color:#f6f9fc;position: sticky;top: 0px}
+.select-type-view{
+    width: fit-content;
+}
+.element-right{
+    text-align: -webkit-right;
+}
+
+#myModal{
+    padding: 0px 0px 0px 0px;
+}
+
+.modal-content {
+    width: 900px;
+    display: inline-block;
+    vertical-align: middle;
+}

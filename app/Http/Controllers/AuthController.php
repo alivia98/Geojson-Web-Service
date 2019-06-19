@@ -41,7 +41,7 @@ class AuthController extends Controller
             'password'=> bcrypt($request->password)
         ]);
 
-        auth()->loginUsingId($user->id);
+        auth()->loginUsingId($user->user_id);
 
         return redirect()->back();
     }

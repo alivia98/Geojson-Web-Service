@@ -16,3 +16,9 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::get('/showArea', 'HomeDesaController@showDesa')->name('homedesa');
+Route::get('/showPoint', 'HomeController@showPoint')->name('home');
+Route::get('/getDisasterData', 'GraphController@getData')->name('getDisasterData');
+Route::get('/get-kecamatan-list','TanlongController@getKecamatanList');
+Route::get('/get-desa-list','TanlongController@getDesaList');
+

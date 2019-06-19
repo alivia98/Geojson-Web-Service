@@ -16,8 +16,24 @@
     <link href=" {{ asset('../assets/vendor/@fortawesome/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
     <!-- Argon CSS -->
     <link type="text/css" href=" {{ asset('../assets/css/argon.css?v=1.0.0') }}" rel="stylesheet">
+    <link type="text/css" href=" {{ asset('../assets/css/main.css') }}" rel="stylesheet">
+    <!-- Leaflet -->
+    <link rel="stylesheet" href=" {{ asset('../leaflet/leaflet.css') }} ">
+    <!-- Chart -->
+    <link type="text/css" href=" {{ asset('../assets/css/Chart.css') }}" rel="stylesheet">
+    <!-- Core -->
+    <script src="{{ asset('../assets/vendor/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ asset('../assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+    <!--Leaflet-->
+    <script src="{{ asset('../leaflet/leaflet.js') }}"></script>
+    <!--Chart-->
+    <script src="{{ asset('../assets/js/Chart.js') }}"></script>
+    <script src="{{ asset('../assets/js/Chart.bundle.js') }}"></script>
 </head>
+<body>
 
-@yield('content')
+    @yield('content')
+
+</body>
 
 </html>

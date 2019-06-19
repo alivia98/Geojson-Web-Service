@@ -1,33 +1,32 @@
 @extends('layout')
 
 @section('content')
+    <!-- Sidenav -->
     @include('navbar-vertical')
-        <!-- Main content -->
+    <!-- Main content -->
     <div class="main-content">
         <!-- Top navbar -->
-        @include('navbar-top')
-        <!-- Header -->
+    @include('navbar-top')
+    <!-- Header -->
         <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
             <div class="container-fluid">
                 <div class="header-body">
+
                 </div>
             </div>
         </div>
         <!-- Page content -->
-        <div class="container-fluid mt--7" style="margin-top: 15px">
+        <div class="container-fluid mt--7">
+            <!-- Table -->
             <div class="row">
-                <div class="col" style="background-color: whitesmoke; border-radius: 15px ">
-                    <div class="element-right">
-                        <div class="form-group select-type-view">
-                            <label for="tipe-view"></label>
-                            <select class="form-control" id="tipe-view">
-                                <option value="1" selected>Titik Lokasi</option>
-                                <option value="2">Wilayah</option>
-                            </select>
+                <div class="col">
+                    <div class="card shadow">
+                        <div class="card-header border-0">
+                            <h2 class="mb-0">Grafik</h2>
                         </div>
-                    </div>
-                    <div id="map-bjn" class="card shadow border-0">
-                        <div id="map-canvas" class="map-canvas" data-lat="40.748817" data-lng="-73.985428" style="height: 600px;"></div>
+                        <canvas id="myChart" style="padding: 30px 30px 30px 30px"></canvas>
+                        <div class="card-footer py-4">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -59,6 +58,48 @@
             </footer>
         </div>
     </div>
+    <script>
+        $.ajax({
+            type : 'get',
+            url : '/api/getDisasterData',
+            dataType: 'json',
+            success : function(response){
+                var tahun = [];
+                var total = [];
+                $.each(response, function (index, value) {
+                    tahun.push(value.tahun);
+                    total.push(value.total);
+                })
 
-        <script src="{{ asset('../assets/js/main.js') }}"></script>
+
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: tahun,
+                        datasets: [{
+                            label: 'Kejadian tanah longsor ',
+                            data: total,
+                            backgroundColor:
+                                'rgba(255, 99, 132, 0.2)'
+                            ,
+                            borderColor:
+                                'rgba(255, 99, 132, 1)'
+                            ,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+        })
+    </script>
 @endsection
