@@ -20,15 +20,17 @@ class TanlongController extends Controller
             ->get();
 
         $kecamatan = $this->getKecamatanList();
+        $desa = $this->getDataDesa();
+
         return view('tanlong_table', [
             'tanlong' => $tanlong,
             'kecamatan' => $kecamatan,
+            'desa' => $desa,
         ]);
     }
 
     public function store(Request $request)
     {
-        // insert data ke table pegawai
         DB::table('tanah_longsor')->insert([
             'desa_id' => $request->desa,
             'tanggal' => $request->tanggal,
@@ -36,49 +38,42 @@ class TanlongController extends Controller
             'kerusakan' => $request->kerusakan,
             'kerugian' => $request->kerugian,
             'latitude' => $request->latitude,
-            'longitude' => $request->longitude
+            'longitude' => $request->longitude,
+            'tahun' => date("Y",strtotime($request->tanggal)),
         ]);
-        // alihkan halaman ke halaman pegawai
+
         return redirect('/tanlong_table');
 
     }
 
     public function edit($id)
     {
-        // mengambil data tanlong berdasarkan id yang dipilih
-        $tanlong = DB::table('tanah_longsor')->where('tanlong_id',$id)->first();
         $tanlong = Tanlong::select('tanah_longsor.*','kecamatan.kecamatan_id')
             ->join('desa','desa.id','=','desa_id')
             ->join('kecamatan', 'kecamatan.kecamatan_id','=','desa.kecamatan_id')
             ->where('tanlong_id',$id)->first();
-        // passing data tanlong yang didapat ke view edit.blade.php
         return response()->json($tanlong);
     }
 
-
-
     public function update(Request $request, $id)
     {
-        DB::table('tanah_longsor')->where('tanlong_id',$id)->update([
-            'desa_id' => $request->desa,
-            'tanggal' => $request->tanggal,
-            'korban' => $request->korban,
-            'kerusakan' => $request->kerusakan,
-            'kerugian' => $request->kerugian,
-            'latitude' => $request->latitude,
-            'longitude' => $request->longitude
-        ]);
-        // alihkan halaman ke halaman tanlong
-        return redirect('/tanlong_table');
+        $tanlong = Tanlong::find($id);
+        $tanlong->desa_id = $request->desa;
+        $tanlong->tanggal = $request->tanggal;
+        $tanlong->korban = $request->korban;
+        $tanlong->kerusakan = $request->kerusakan;
+        $tanlong->kerugian = $request->kerugian;
+        $tanlong->latitude = $request->latitude;
+        $tanlong->longitude = $request->longitude;
+        $tanlong->save();
+
+        return redirect('/user_table');
     }
 
-    // method untuk hapus data tanlong
     public function hapus($id)
     {
-        // menghapus data tanlong berdasarkan id yang dipilih
         DB::table('tanah_longsor')->where('tanlong_id',$id)->delete();
 
-        // alihkan halaman ke halaman tanlong
         return redirect('/tanlong_table');
     }
 
@@ -92,4 +87,35 @@ class TanlongController extends Controller
         return response()->json($desa);
     }
 
+    public function getDataDesa(){
+        return $data_desa = Desa::all();
+    }
+
+    public function showDesa(Request $request){
+        $start_date = intval($request->startDate);
+        $end_date = intval($request->endDate);
+        $start_id = $request->id;
+        $end_id = $start_id;
+
+        if ($request->filter == 1){
+            $statement = "kecamatan.kecamatan_id";
+        }else if ($request->filter == 2){
+            $statement = "desa.id";
+        }else{
+            $statement = "kecamatan.kecamatan_id";
+            $start_id = 0;
+            $end_id = 200;
+        }
+
+        $tanlong = DB::table('tanah_longsor')
+            ->join('desa','desa.id','=','desa_id')
+            ->join('kecamatan', 'kecamatan.kecamatan_id','=','desa.kecamatan_id')
+            ->whereBetween( $statement, [$start_id, $end_id])
+            ->whereBetween('tanah_longsor.tahun',[$start_date,$end_date])
+            ->orderBy('tanah_longsor.tahun', 'desc')
+            ->get();
+
+        $data_desa = json_encode($tanlong,JSON_PRETTY_PRINT);
+        return $data_desa;
+    }
 }

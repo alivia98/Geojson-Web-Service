@@ -4,12 +4,7 @@
     <body class="bg-default">
     <div class="main-content">
         <!-- Header -->
-        <div class="header bg-gradient-primary py-7 py-lg-8">
-            <div class="container">
-                <div class="header-body text-center">
-                    <h1 class="text-white">Welcome!</h1>
-                </div>
-            </div>
+        <div class="header py-7 py-lg-8" style="background-color: #d31e40">
             <div class="separator separator-bottom separator-skew zindex-100">
                 <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
                     <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
@@ -23,9 +18,7 @@
                 <div class="col-lg-6 col-md-8">
                     <div class="card bg-secondary shadow border-0">
                         <div class="card-body px-lg-5 py-lg-5">
-                            <div class="text-center text-muted mb-4">
-                                <small>Sign Up Please...</small>
-                            </div>
+                            <img src="{{ asset('../assets/img/brand/logo1.png') }} " class="navbar-brand-logo" style=" max-width:100%; max-height:200px; padding-left: 155px; padding-bottom: 15px" alt="...">
                             <form role="form" method="post" action=" {{ route('register') }}">
                                 {{ csrf_field() }}
                                 <div class="form-group">
@@ -88,6 +81,14 @@
                                     <button type="submit" class="btn btn-primary mt-4">Create account</button>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-6">
+
+                        </div>
+                        <div class="col-6 text-right">
+                            <a href="/login" class="text-light"><small>Already have an account ?</small></a>
                         </div>
                     </div>
                 </div>

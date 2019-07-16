@@ -8,21 +8,33 @@
         <!-- Top navbar -->
     @include('navbar-top')
     <!-- Header -->
-        <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
+        <div class="header pt-5 pt-md-8" style="padding-bottom: 4rem; background-color: #d31e40">
             <div class="container-fluid">
                 <div class="header-body">
-
                 </div>
             </div>
         </div>
         <!-- Page content -->
         <div class="container-fluid mt--7">
-            <!-- Table -->
             <div class="row">
                 <div class="col">
                     <div class="card shadow">
                         <div class="card-header border-0">
-                            <h2 class="mb-0">Grafik</h2>
+                            <h1 class="mb-0">Daerah Pemetaan Riwayat Tanah Longsor</h1>
+                        </div>
+                        <div id="map-mapping" class="card shadow border-0">
+                            <div id="map-mapping" class="map-canvas" data-lat="40.748817" data-lng="-73.985428" style="height: 600px;"></div>
+                        </div>
+                        <div class="card-footer py-4">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="card shadow">
+                        <div class="card-header border-0">
+                            <h1 class="mb-0">Grafik</h1>
                         </div>
                         <canvas id="myChart" style="padding: 30px 30px 30px 30px"></canvas>
                         <div class="card-footer py-4">
@@ -102,4 +114,55 @@
             }
         })
     </script>
+    <script>
+        var dataArray;
+        function getColor(d) {
+            return  d > 9  ? '#E31A1C' :
+                    d > 5  ? '#FC4E2A' :
+                    d > 1   ? '#FD8D3C' :
+                     '#FFEDA0';
+        }
+
+        function style(feature) {
+            return {
+                fillColor: getColor(feature.properties.jumlah),
+                weight: 2,
+                opacity: 1,
+                color: 'white',
+                dashArray: '3',
+                fillOpacity: 0.7
+            };
+        }
+
+        function onEachFeature(feature, layer) {
+            var popupContent =  "<div class='popup-body'> Desa : "+ feature.properties.nama_desa+"</div>"+
+                "<div class='popup-body'> Jumlah Tanah Longsor : "+ feature.properties.jumlah+"</div>"
+            layer.bindPopup(popupContent);
+        }
+
+        var mymap = L.map('map-mapping').setView([-7.2373719, 111.7938153], 11);
+
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYWxpdmlhcmFoOTgiLCJhIjoiY2p2bnZjMjk3MDRlbDQ4cGk5MTEyeXlnaSJ9.XbTgr6-iLZAygZRJ9dyvfg', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox.streets',
+            accessToken: 'pk.eyJ1IjoiYWxpdmlhcmFoOTgiLCJhIjoiY2p2bnZjMjk3MDRlbDQ4cGk5MTEyeXlnaSJ9.XbTgr6-iLZAygZRJ9dyvfg'
+        }).addTo(mymap);
+
+         $.ajax({
+             type : 'get',
+             url : '/api/getMapDesaData',
+             dataType: 'json',
+             success : function(response){
+                 console.log(response)
+
+                 L.geoJSON(response, {
+                     style : style,
+                     onEachFeature: onEachFeature
+                 }).addTo(mymap);
+             }
+         })
+
+    </script>
+    <script src="{{ asset('../assets/js/main.js') }}"></script>
 @endsection

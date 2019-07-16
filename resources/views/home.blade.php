@@ -7,7 +7,7 @@
         <!-- Top navbar -->
         @include('navbar-top')
         <!-- Header -->
-        <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
+        <div class="header pt-5 pt-md-8" style="padding-bottom: 4rem; background-color: #d31e40">
             <div class="container-fluid">
                 <div class="header-body">
                 </div>
@@ -17,8 +17,11 @@
         <div class="container-fluid mt--7" style="margin-top: 15px">
             <div class="row">
                 <div class="col" style="background-color: whitesmoke; border-radius: 15px ">
+                    <div class="element-left" style="padding-top: 30px; padding-left: 30px; margin-bottom: 0px">
+                        <h1>Peta Lokasi Tanah Longsor</h1>
+                    </div>
                     <div class="element-right">
-                        <div class="form-group select-type-view">
+                        <div class="form-group select-type-view" style="padding-top: 0px">
                             <label for="tipe-view"></label>
                             <select class="form-control" id="tipe-view">
                                 <option value="1" selected>Titik Lokasi</option>

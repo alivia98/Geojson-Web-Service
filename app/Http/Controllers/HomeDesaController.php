@@ -26,12 +26,10 @@ class HomeDesaController extends Controller
         $allfeatures = array('type' => 'FeatureCollection', 'features' => $features);
 
         $data_desa = json_encode($allfeatures,JSON_PRETTY_PRINT);
-//        return view(dd($data_desa));
         return $data_desa;
     }
     public function index(){
         $data_desa = $this->showDesa();
-
         return view('homedesa', compact ('data_desa'));
     }
 }

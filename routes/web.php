@@ -11,6 +11,8 @@
 |
 */
 
+Route::get('/', 'AuthController@getLogin')->middleware('guest')->name('login');
+
 Route::get('/register', 'AuthController@getRegister')->name('register')->middleware('guest');
 Route::post('/register', 'AuthController@postRegister')->middleware('guest');
 
@@ -25,6 +27,10 @@ Route::get('/home/desa', 'HomeDesaController@showDesa')->middleware('auth')->nam
 Route::get('/logout', 'AuthController@logout')->middleware('auth')->name('logout');
 
 Route::get('/user_table', 'UserController@index')->middleware('auth')->name('user_table');
+Route::get('/user_table/edit/{id}','UserController@edit');
+Route::post('/user_table/update/{id}','UserController@update');
+Route::get('/user_table/hapus/{id}','UserController@hapus');
+Route::post('/user_table/store', 'UserController@store');
 
 Route::get('/tanlong_table', 'TanlongController@index')->middleware('auth')->name('tanlong_table');
 Route::post('/tanlong_table/store', 'TanlongController@store');
@@ -33,10 +39,11 @@ Route::get('/get-desa-list','TanlongController@getDesaList');
 Route::get('/tanlong_table/edit/{id}','TanlongController@edit');
 Route::post('/tanlong_table/update/{id}','TanlongController@update');
 Route::get('/tanlong_table/hapus/{id}','TanlongController@hapus');
+Route::get('/get-tanlong-desa-list','TanlongController@showDesa');
+Route::get('/get-tanlong-kecamatan-list','TanlongController@showKecamatan');
 
 Route::get('/graph', function (){
     return view('graph');
 })->middleware('auth')->name('graph');
 
 Route::resource('/graph', 'GraphController');
-

@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\user;
+use App\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -16,10 +17,43 @@ class AuthController extends Controller
 
     public function postLogin(Request $request)
     {
-        if (!auth()->attempt(['username' => $request->username, 'password' => $request->password])){
+        $validator = auth()->attempt(['username' => $request->username, 'password' => $request->password]);
+        if (!$validator){
             return redirect()->back();
         }
         return redirect()->route('home');
+    }
+
+    public function apiLogin(Request $request)
+    {
+        $Username = $request->input('username');
+        $Password = $request->password;
+        $Validate = User::where('username', $Username)->first();
+
+        if (is_null($Validate)){
+            $params = [
+                'succcess' => false,
+                'response_code' => 400,
+                'message' => 'Username not found',
+            ];
+            return response()->json($params, 400);
+        }
+
+        if(Hash::check($Password, $Validate->password)) {
+            $params = [
+                'succcess' => true,
+                'response_code' => 200,
+                'meesage' => 'Login Success'
+            ];
+            return response()->json($params, 200);
+        }
+
+        $params = [
+            'succcess' => false,
+            'response_code' => 500,
+            'meesage' => 'Login Failed'
+        ];
+        return response()->json($params, 500);
     }
 
     public function getRegister()
@@ -38,7 +72,7 @@ class AuthController extends Controller
         $user = User::create([
             'username' => $request->username,
             'email'=> $request->email,
-            'password'=> bcrypt($request->password)
+            'password'=> Hash::make($request->password)
         ]);
 
         auth()->loginUsingId($user->user_id);
@@ -50,6 +84,6 @@ class AuthController extends Controller
     {
         auth()->logout();
 
-        return redirect()->route('login');
+        return redirect('login')->with('alert','Kamu sudah logout');
     }
 }

@@ -16,19 +16,21 @@ class User extends Authenticatable
      * @var array
      */
 
+    protected $table = 'users';
     protected $primaryKey = 'user_id';
 
     protected $fillable = [
-        'username', 'email', 'password',
+        'username', 'email', 'password', 'role_id'
     ];
 
+    public $timestamps = true;
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'remember_token',
     ];
 
     /**
@@ -39,4 +41,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function role()
+    {
+        return $this->belongsTo('App\Role');
+    }
 }
